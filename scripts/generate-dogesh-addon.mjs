@@ -90,11 +90,21 @@ await put(join(rp, 'entity', 'dogesh.entity.json'), {
     description: {
       identifier: 'dogesh:dogesh',
       materials: { default: 'wolf' },
-      textures: { default: 'textures/entity/dogesh' },
+      textures: {
+        default: 'textures/entity/dogesh',
+        tame: 'textures/entity/dogesh',
+        angry: 'textures/entity/dogesh'
+      },
       geometry: { default: 'geometry.wolf' },
-      animations: { walk: 'animation.wolf.walk', sit: 'animation.wolf.sit' },
-      scripts: { animate: ['walk'] },
-      render_controllers: ['controller.render.wolf']
+      animations: {
+        look_at_target: 'animation.common.look_at_target',
+        walk: 'animation.wolf.walk',
+        sitting: 'animation.wolf.sitting',
+        shaking: 'animation.wolf.shaking'
+      },
+      animation_controllers: [{ setup: { animations: ['look_at_target'] } }],
+      render_controllers: ['controller.render.wolf'],
+      spawn_egg: { texture: 'spawn_egg', texture_index: 0 }
     }
   }
 })
