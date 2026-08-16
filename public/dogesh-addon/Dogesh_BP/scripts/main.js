@@ -54,7 +54,23 @@ function isOwner(player, dog) {
 
 function bindOwner(player) {
   for (const dog of dogeshEntities()) {
+    if (!isValidDog(dog)) continue;
     if (dog.getDynamicProperty(OWNER_KEY) === undefined) dog.setDynamicProperty(OWNER_KEY, ownerIdFor(player));
+  }
+}
+
+function recoverDogToOwner(player) {
+  const ownerId = ownerIdFor(player);
+  for (const dog of dogeshEntities()) {
+    if (!isValidDog(dog) || dog.getDynamicProperty(OWNER_KEY) !== ownerId) continue;
+    try {
+      if (dog.dimension.id !== player.dimension.id) {
+        dog.teleport(player.location, { dimension: player.dimension, facingLocation: player.location });
+        sendBridgeEvent('DogeshDimensionRecovered', { ownerId, dimensionId: player.dimension.id });
+      }
+    } catch {
+      // The player or target chunk may be transitioning between dimensions.
+    }
   }
 }
 
@@ -85,6 +101,7 @@ world.afterEvents.playerInteractWithEntity.subscribe(({ player, target }) => {
 system.runInterval(() => {
   if (eventCooldown > 0) eventCooldown--;
   ensureDogesh();
+  for (const player of world.getAllPlayers()) recoverDogToOwner(player);
   const dog = dogeshEntities()[0];
   if (isValidDog(dog)) {
     sendBridgeEvent('DogeshPosition', {
