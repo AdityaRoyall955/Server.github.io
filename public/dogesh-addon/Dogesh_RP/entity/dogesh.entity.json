@@ -7,23 +7,35 @@
         "default": "wolf"
       },
       "textures": {
-        "default": "textures/entity/dogesh"
+        "default": "textures/entity/dogesh",
+        "tame": "textures/entity/dogesh",
+        "angry": "textures/entity/dogesh"
       },
       "geometry": {
         "default": "geometry.wolf"
       },
       "animations": {
+        "look_at_target": "animation.common.look_at_target",
         "walk": "animation.wolf.walk",
-        "sit": "animation.wolf.sit"
+        "sitting": "animation.wolf.sitting",
+        "shaking": "animation.wolf.shaking"
       },
-      "scripts": {
-        "animate": [
-          "walk"
-        ]
-      },
+      "animation_controllers": [
+        {
+          "setup": {
+            "animations": [
+              "look_at_target"
+            ]
+          }
+        }
+      ],
       "render_controllers": [
         "controller.render.wolf"
-      ]
+      ],
+      "spawn_egg": {
+        "texture": "spawn_egg",
+        "texture_index": 0
+      }
     }
   }
 }

@@ -90,11 +90,21 @@ await put(join(rp, 'entity', 'dogesh.entity.json'), {
     description: {
       identifier: 'dogesh:dogesh',
       materials: { default: 'wolf' },
-      textures: { default: 'textures/entity/dogesh' },
+      textures: {
+        default: 'textures/entity/dogesh',
+        tame: 'textures/entity/dogesh',
+        angry: 'textures/entity/dogesh'
+      },
       geometry: { default: 'geometry.wolf' },
-      animations: { walk: 'animation.wolf.walk', sit: 'animation.wolf.sit' },
-      scripts: { animate: ['walk'] },
-      render_controllers: ['controller.render.wolf']
+      animations: {
+        look_at_target: 'animation.common.look_at_target',
+        walk: 'animation.wolf.walk',
+        sitting: 'animation.wolf.sitting',
+        shaking: 'animation.wolf.shaking'
+      },
+      animation_controllers: [{ setup: { animations: ['look_at_target'] } }],
+      render_controllers: ['controller.render.wolf'],
+      spawn_egg: { texture: 'spawn_egg', texture_index: 0 }
     }
   }
 })
@@ -121,12 +131,28 @@ function sendBridgeEvent(type, body = {}) {
 }
 
 function dogeshEntities() {
-  return [...world.getDimension('overworld').getEntities({ type: DOGESH_ID })];
+  const dogs = [];
+  for (const dimensionId of ['overworld', 'nether', 'the_end']) {
+    try {
+      dogs.push(...world.getDimension(dimensionId).getEntities({ type: DOGESH_ID }));
+    } catch {
+      // A dimension can be unavailable during early world startup.
+    }
+  }
+  return dogs;
+}
+
+function isValidDog(dog) {
+  try {
+    return Boolean(dog?.isValid() && dog.typeId === DOGESH_ID);
+  } catch {
+    return false;
+  }
 }
 
 function ensureDogesh() {
-  const dogs = dogeshEntities();
-  for (const dog of dogs) {
+  for (const dog of dogeshEntities()) {
+    if (!isValidDog(dog)) continue;
     if (dog.getDynamicProperty('is_dogesh') !== true) dog.setDynamicProperty('is_dogesh', true);
     if (!dog.hasTag(BRAIN_TAG)) dog.addTag(BRAIN_TAG);
     if (!dog.nameTag) dog.nameTag = 'Dogesh';
@@ -138,13 +164,30 @@ function ownerIdFor(player) {
 }
 
 function isOwner(player, dog) {
+  if (!isValidDog(dog)) return false;
   const owner = dog.getDynamicProperty(OWNER_KEY);
   return owner === undefined || owner === ownerIdFor(player);
 }
 
 function bindOwner(player) {
   for (const dog of dogeshEntities()) {
+    if (!isValidDog(dog)) continue;
     if (dog.getDynamicProperty(OWNER_KEY) === undefined) dog.setDynamicProperty(OWNER_KEY, ownerIdFor(player));
+  }
+}
+
+function recoverDogToOwner(player) {
+  const ownerId = ownerIdFor(player);
+  for (const dog of dogeshEntities()) {
+    if (!isValidDog(dog) || dog.getDynamicProperty(OWNER_KEY) !== ownerId) continue;
+    try {
+      if (dog.dimension.id !== player.dimension.id) {
+        dog.teleport(player.location, { dimension: player.dimension, facingLocation: player.location });
+        sendBridgeEvent('DogeshDimensionRecovered', { ownerId, dimensionId: player.dimension.id });
+      }
+    } catch {
+      // The player or target chunk may be transitioning between dimensions.
+    }
   }
 }
 
@@ -154,7 +197,7 @@ world.afterEvents.playerSpawn.subscribe(({ player, initialSpawn }) => {
 });
 
 world.afterEvents.entityHurt.subscribe(({ hurtEntity, damageSource }) => {
-  if (hurtEntity.typeId !== DOGESH_ID || eventCooldown > 0) return;
+  if (!isValidDog(hurtEntity) || eventCooldown > 0) return;
   eventCooldown = EVENT_COOLDOWN;
   sendBridgeEvent('DogeshDamaged', { entityId: hurtEntity.id, attackerId: damageSource?.damagingEntity?.id ?? null, message: 'Bhai mujhe mara!' });
 });
@@ -166,7 +209,7 @@ world.afterEvents.playerInteractWithBlock.subscribe(({ player, block }) => {
 });
 
 world.afterEvents.playerInteractWithEntity.subscribe(({ player, target }) => {
-  if (target.typeId !== DOGESH_ID) return;
+  if (!isValidDog(target)) return;
   if (target.getDynamicProperty(OWNER_KEY) === undefined) target.setDynamicProperty(OWNER_KEY, ownerIdFor(player));
   target.triggerEvent('dogesh:happy_bark');
   sendBridgeEvent('DogeshInteraction', { playerId: ownerIdFor(player), entityId: target.id });
@@ -175,12 +218,19 @@ world.afterEvents.playerInteractWithEntity.subscribe(({ player, target }) => {
 system.runInterval(() => {
   if (eventCooldown > 0) eventCooldown--;
   ensureDogesh();
+  for (const player of world.getAllPlayers()) recoverDogToOwner(player);
   const dog = dogeshEntities()[0];
-  if (dog) sendBridgeEvent('DogeshPosition', { entityId: dog.id, location: dog.location, ownerId: dog.getDynamicProperty(OWNER_KEY) ?? null });
+  if (isValidDog(dog)) {
+    sendBridgeEvent('DogeshPosition', {
+      entityId: dog.id,
+      location: { x: Math.round(dog.location.x), y: Math.round(dog.location.y), z: Math.round(dog.location.z) },
+      ownerId: dog.getDynamicProperty(OWNER_KEY) ?? null
+    });
+  }
 }, 20);
 `)
 
-await put(join(out, 'README.md'), '# Dogesh Bedrock Add-on\\n\\nTarget: Minecraft Bedrock 1.26.33. Dogesh is a cute dog-wolf companion with persistent Script API identity.\\n\\n## Install\\n1. Import Dogesh.mcaddon into Bedrock.\\n2. Activate both Dogesh Behavior Pack and Dogesh Resource Pack in the world.\\n3. Enable Beta APIs / Script API if your 1.26.33 build exposes that toggle.\\n4. Enable cheats and operator permissions because commandRequest packets execute world commands.\\n5. Summon with /summon dogesh:dogesh ~ ~ ~. The pack also recognizes the ai_dog tag.\\n\\n## Bridge contract\\nThe supplied Node bridge remains the command brain. Commands should target @e[type=dogesh:dogesh,c=1] and use event entity @e[type=dogesh:dogesh,c=1] dogesh:happy_bark, event entity @e[type=dogesh:dogesh,c=1] dogesh:digging_animation, setblock, fill, and give only after server-side validation.\\n\\nThe Script API emits JSON event envelopes through the supported server event channel. Your bridge should parse messages beginning with the invisible-prefix packet and route DogeshDamaged, BlockInteracted, DogeshInteraction, and DogeshPosition back to Groq.\\n\\n## Owner security\\nDo not authorize by display name alone. Store the owner Bedrock UUID/id in your Termux environment as DOGESH_OWNER_ID, compare it with the Script API owner_id dynamic property, and reject destructive tools unless both match.\\n\\n## Localhost caveat\\n127.0.0.1 means the machine running Bedrock. If Minecraft runs on a different phone/PC from Termux, use that host LAN IP instead.\\n')
+await put(join(out, 'README.md'), '# Dogesh Bedrock Add-on\\n\\nTarget: Minecraft Bedrock 1.26.33. Dogesh is a cute dog-wolf companion with persistent Script API identity.\\n\\n## Install\\n1. Import Dogesh.mcaddon into Bedrock.\\n2. Activate both Dogesh Behavior Pack and Dogesh Resource Pack in the world.\\n3. Enable Beta APIs / Script API if your 1.26.33 build exposes that toggle.\\n4. Enable cheats and operator permissions because commandRequest packets execute world commands.\\n5. Summon with /summon dogesh:dogesh ~ ~ ~. The pack also recognizes the ai_dog tag.\\n\\n## Bridge contract\\nThe supplied Node bridge remains the command brain. Commands should target @e[type=dogesh:dogesh,c=1] and use event entity @e[type=dogesh:dogesh,c=1] dogesh:happy_bark, event entity @e[type=dogesh:dogesh,c=1] dogesh:digging_animation, setblock, fill, and give only after server-side validation.\\n\\nThe Script API emits JSON event envelopes through the supported server event channel. Your bridge should parse messages beginning with the invisible-prefix packet and route DogeshDamaged, BlockInteracted, DogeshInteraction, DogeshPosition, and DogeshDimensionRecovered back to Groq. For player-relative placement, rotate Dogesh first with `execute as @e[type=dogesh:dogesh,c=1] at @s run tp @s ~ ~ ~ facing "<owner>"`, then use `setblock ^ ^ ^2 <block>` only after validating the owner and block. If Minecraft and Termux run on different devices, replace 127.0.0.1 with the Minecraft device LAN address. On Android, set Termux battery usage to Unrestricted and keep its wakelock/notification active to reduce disconnects.\\n\\n## Owner security\\nDo not authorize by display name alone. Store the owner Bedrock UUID/id in your Termux environment as DOGESH_OWNER_ID, compare it with the Script API owner_id dynamic property, and reject destructive tools unless both match.\\n\\n## Localhost caveat\\n127.0.0.1 means the machine running Bedrock. If Minecraft runs on a different phone/PC from Termux, use that host LAN IP instead.\\n')
 
 
 const zip = join(root, 'public', 'Dogesh.mcaddon')
