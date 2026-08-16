@@ -1,0 +1,29 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "dogesh:dogesh",
+      "materials": {
+        "default": "wolf"
+      },
+      "textures": {
+        "default": "textures/entity/dogesh"
+      },
+      "geometry": {
+        "default": "geometry.wolf"
+      },
+      "animations": {
+        "walk": "animation.wolf.walk",
+        "sit": "animation.wolf.sit"
+      },
+      "scripts": {
+        "animate": [
+          "walk"
+        ]
+      },
+      "render_controllers": [
+        "controller.render.wolf"
+      ]
+    }
+  }
+}

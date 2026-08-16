@@ -1,0 +1,208 @@
+{
+  "format_version": "1.21.0",
+  "minecraft:entity": {
+    "description": {
+      "identifier": "dogesh:dogesh",
+      "is_spawnable": true,
+      "is_summonable": true,
+      "is_experimental": false
+    },
+    "components": {
+      "minecraft:type_family": {
+        "family": [
+          "dogesh",
+          "wolf",
+          "mob"
+        ]
+      },
+      "minecraft:health": {
+        "value": 80,
+        "max": 80
+      },
+      "minecraft:collision_box": {
+        "width": 0.6,
+        "height": 0.85
+      },
+      "minecraft:nameable": {},
+      "minecraft:movement": {
+        "value": 0.3
+      },
+      "minecraft:navigation.walk": {
+        "is_trekkable": true,
+        "can_path_over_water": true,
+        "avoid_damage_blocks": true
+      },
+      "minecraft:movement.basic": {},
+      "minecraft:jump.static": {},
+      "minecraft:can_climb": {},
+      "minecraft:behavior.float": {
+        "priority": 0
+      },
+      "minecraft:behavior.panic": {
+        "priority": 1,
+        "speed_multiplier": 1.4
+      },
+      "minecraft:behavior.follow_owner": {
+        "priority": 4,
+        "speed_multiplier": 1.2,
+        "start_distance": 6,
+        "stop_distance": 2
+      },
+      "minecraft:behavior.owner_hurt_by_target": {
+        "priority": 5
+      },
+      "minecraft:behavior.owner_hurt_target": {
+        "priority": 6
+      },
+      "minecraft:behavior.nearest_attackable_target": {
+        "priority": 7,
+        "must_see": true,
+        "reselect_targets": true,
+        "within_radius": 16,
+        "entity_types": [
+          {
+            "filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "monster"
+            },
+            "max_dist": 16
+          }
+        ]
+      },
+      "minecraft:behavior.melee_attack": {
+        "priority": 8,
+        "speed_multiplier": 1.25,
+        "track_target": true
+      },
+      "minecraft:behavior.pickup_items": {
+        "priority": 9,
+        "max_dist": 8,
+        "goal_radius": 2,
+        "excluded_items": []
+      },
+      "minecraft:behavior.random_stroll": {
+        "priority": 10,
+        "speed_multiplier": 0.8
+      },
+      "minecraft:behavior.random_look_around": {
+        "priority": 11
+      },
+      "minecraft:tameable": {
+        "probability": 1,
+        "tame_items": [
+          "bone"
+        ]
+      },
+      "minecraft:interact": {
+        "interactions": [
+          {
+            "on_interact": {
+              "event": "dogesh:happy_bark",
+              "target": "self"
+            },
+            "use_item": false,
+            "swing": true
+          }
+        ]
+      },
+      "minecraft:celebrate": {
+        "duration": 3,
+        "sound": "mob.wolf.bark",
+        "jump_interval": {
+          "range_min": 1,
+          "range_max": 2
+        }
+      },
+      "minecraft:damage_sensor": {
+        "triggers": [
+          {
+            "cause": "all",
+            "deals_damage": true,
+            "on_damage": {
+              "event": "dogesh:damaged",
+              "target": "self"
+            }
+          }
+        ]
+      },
+      "minecraft:behavior.look_at_player": {
+        "priority": 12,
+        "look_distance": 8,
+        "probability": 0.8
+      },
+      "minecraft:physics": {},
+      "minecraft:pushable": {
+        "is_pushable": true,
+        "is_pushable_by_piston": true
+      }
+    },
+    "events": {
+      "dogesh:initialize": {
+        "add": {
+          "component_groups": [
+            "dogesh:initialized"
+          ]
+        }
+      },
+      "dogesh:happy_bark": {
+        "sequence": [
+          {
+            "add": {
+              "component_groups": [
+                "dogesh:celebrating"
+              ]
+            }
+          },
+          {
+            "queue_command": {
+              "command": [
+                "playsound mob.wolf.bark @a ~ ~ ~ 1 1.2",
+                "particle minecraft:heart_particle ~ ~1 ~"
+              ]
+            }
+          },
+          {
+            "remove": {
+              "component_groups": [
+                "dogesh:celebrating"
+              ]
+            }
+          }
+        ]
+      },
+      "dogesh:digging_animation": {
+        "queue_command": {
+          "command": [
+            "playsound dig.grass @a ~ ~ ~ 0.7 1.1",
+            "particle minecraft:block_destruct ~ ~0.15 ~"
+          ]
+        }
+      },
+      "dogesh:damaged": {
+        "queue_command": {
+          "command": [
+            "playsound mob.wolf.whine @a ~ ~ ~ 1 1"
+          ]
+        }
+      }
+    },
+    "component_groups": {
+      "dogesh:initialized": {
+        "minecraft:variant": {
+          "value": 0
+        }
+      },
+      "dogesh:celebrating": {
+        "minecraft:celebrate": {
+          "duration": 3,
+          "sound": "mob.wolf.bark",
+          "jump_interval": {
+            "range_min": 1,
+            "range_max": 2
+          }
+        }
+      }
+    }
+  }
+}

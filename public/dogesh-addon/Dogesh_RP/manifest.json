@@ -1,0 +1,29 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "Dogesh Resource Pack",
+    "description": "Cute dog-wolf model, collar, animation, and language.",
+    "uuid": "a4b9db7c-4e30-4ec7-946b-2af59e420002",
+    "version": [
+      1,
+      0,
+      0
+    ],
+    "min_engine_version": [
+      1,
+      26,
+      0
+    ]
+  },
+  "modules": [
+    {
+      "type": "resources",
+      "uuid": "a4b9db7c-4e30-4ec7-946b-2af59e420004",
+      "version": [
+        1,
+        0,
+        0
+      ]
+    }
+  ]
+}
