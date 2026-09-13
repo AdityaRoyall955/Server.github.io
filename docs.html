@@ -9,25 +9,63 @@
 </head>
 <body class="bg-slate-950 text-slate-100 font-sans leading-relaxed selection:bg-emerald-500 selection:text-slate-950">
 
-    <!-- Header -->
+    <!-- Universal Responsive Navbar -->
     <nav class="border-b border-slate-800 bg-slate-900/80 sticky top-0 backdrop-blur z-50">
         <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-            <a href="index.html" class="font-bold text-emerald-400 text-lg flex items-center gap-2 hover:underline">
-                <i class="fa-solid fa-arrow-left"></i> Home Page
+            <a href="index.html" class="flex items-center space-x-3">
+                <div class="bg-emerald-500/10 p-2 rounded-lg border border-emerald-500/20 text-emerald-400">
+                    <i class="fa-solid fa-terminal text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg tracking-wide text-slate-100">Minecraft Panel Pro</h1>
+                    <p class="text-xs text-slate-400">Termux & Android Hosting</p>
+                </div>
             </a>
-            <span class="text-xs bg-slate-800 px-3 py-1 rounded-full text-slate-400 border border-slate-700 font-mono">Docs v2.0 - Deep Guide</span>
+
+            <!-- Desktop Links -->
+            <div class="hidden md:flex space-x-6 text-sm font-medium text-slate-300">
+                <a href="index.html" class="hover:text-emerald-400 transition">Home</a>
+                <a href="docs.html" class="text-emerald-400 font-semibold">Docs</a>
+                <a href="features.html" class="hover:text-emerald-400 transition">Features</a>
+                <a href="faq.html" class="hover:text-emerald-400 transition">FAQ</a>
+                <a href="calculator.html" class="hover:text-emerald-400 transition">RAM Calculator</a>
+                <a href="generator.html" class="hover:text-emerald-400 transition">Config Generator</a>
+            </div>
+
+            <!-- GitHub Link & Mobile Menu Toggle -->
+            <div class="flex items-center space-x-3">
+                <a href="https://github.com/AdityaRoyall955/Minecraft-Ultimate-Turmux-server" target="_blank" class="hidden sm:flex bg-slate-800 hover:bg-slate-700 border border-slate-700 px-3.5 py-1.5 rounded-xl text-xs font-medium transition items-center space-x-2">
+                    <i class="fa-brands fa-github text-sm"></i>
+                    <span>GitHub</span>
+                </a>
+                <button onclick="toggleMobileMenu()" class="md:hidden text-slate-300 hover:text-emerald-400 text-xl focus:outline-none">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobileMenu" class="hidden md:hidden border-t border-slate-800 bg-slate-900 px-4 py-4 space-y-3 text-sm">
+            <a href="index.html" class="block text-slate-300 hover:text-emerald-400">Home</a>
+            <a href="docs.html" class="block text-emerald-400 font-semibold">Docs</a>
+            <a href="features.html" class="block text-slate-300 hover:text-emerald-400">Features</a>
+            <a href="faq.html" class="block text-slate-300 hover:text-emerald-400">FAQ</a>
+            <a href="calculator.html" class="block text-slate-300 hover:text-emerald-400">RAM Calculator</a>
+            <a href="generator.html" class="block text-slate-300 hover:text-emerald-400">Config Generator</a>
+            <a href="https://github.com/AdityaRoyall955/Minecraft-Ultimate-Turmux-server" target="_blank" class="inline-flex bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-lg text-xs items-center space-x-2">
+                <i class="fa-brands fa-github"></i>
+                <span>GitHub Repo</span>
+            </a>
         </div>
     </nav>
 
     <main class="max-w-4xl mx-auto px-4 py-12 space-y-12">
-
-        <!-- Title Header -->
         <div class="border-b border-slate-800 pb-6">
             <h1 class="text-4xl font-extrabold text-emerald-400 mb-3 tracking-tight">Complete Technical Documentation</h1>
             <p class="text-slate-400 text-base">Termux par Android mobile se full-fledged Minecraft Server host karne ka comprehensive deep-dive guide.</p>
         </div>
 
-        <!-- Section 1: Pre-requisites & Termux Setup -->
+        <!-- Section 1 -->
         <section class="space-y-4">
             <h2 class="text-2xl font-bold text-slate-100 flex items-center gap-3">
                 <span class="bg-emerald-500/20 text-emerald-400 w-8 h-8 rounded-lg flex items-center justify-center text-sm border border-emerald-500/30">1</span>
@@ -35,130 +73,54 @@
             </h2>
             <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4">
                 <p class="text-slate-300 text-sm">
-                    <strong>Note:</strong> Google Play Store wala Termux version completely outdated hai aur usme build errors aayege. Always install Termux from <a href="https://f-droid.org/en/packages/com.termux/" target="_blank" class="text-emerald-400 underline">F-Droid</a>.
+                    <strong>Note:</strong> Play Store wala Termux outdated hai. Always install Termux from <a href="https://f-droid.org/en/packages/com.termux/" target="_blank" class="text-emerald-400 underline">F-Droid</a>.
                 </p>
-                <div class="space-y-2">
-                    <p class="text-xs font-mono text-slate-400">Step 1.1: System Repositories Update & Storage Permission</p>
-                    <div class="bg-slate-950 p-4 rounded-xl font-mono text-xs text-emerald-400 border border-slate-800 overflow-x-auto">
-                        termux-setup-storage<br>
-                        pkg update -y && pkg upgrade -y
-                    </div>
-                </div>
-                <div class="space-y-2">
-                    <p class="text-xs font-mono text-slate-400">Step 1.2: Essential Dependencies Install Karen</p>
-                    <p class="text-xs text-slate-400">OpenJDK 17/21 (Java Server chalane ke liye), Git (Repo clone ke liye), aur Wget/Curl required hain:</p>
-                    <div class="bg-slate-950 p-4 rounded-xl font-mono text-xs text-emerald-400 border border-slate-800 overflow-x-auto">
-                        pkg install openjdk-17 git wget curl jq -y
-                    </div>
+                <div class="bg-slate-950 p-4 rounded-xl font-mono text-xs text-emerald-400 border border-slate-800 overflow-x-auto">
+                    termux-setup-storage<br>
+                    pkg update -y && pkg upgrade -y<br>
+                    pkg install openjdk-17 git wget curl jq -y
                 </div>
             </div>
         </section>
 
-        <!-- Section 2: Repository Cloning & Script Operations -->
+        <!-- Section 2 -->
         <section class="space-y-4">
             <h2 class="text-2xl font-bold text-slate-100 flex items-center gap-3">
                 <span class="bg-emerald-500/20 text-emerald-400 w-8 h-8 rounded-lg flex items-center justify-center text-sm border border-emerald-500/30">2</span>
                 Setup Project & Script Execution
             </h2>
             <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4">
-                <p class="text-slate-300 text-sm">Project repository ko Termux me clone karein aur execute permission grant karein:</p>
                 <div class="bg-slate-950 p-4 rounded-xl font-mono text-xs text-emerald-400 border border-slate-800 overflow-x-auto">
                     git clone https://github.com/AdityaRoyall955/Minecraft-Ultimate-Turmux-server.git<br>
                     cd Minecraft-Ultimate-Turmux-server<br>
-                    chmod +x *.sh
-                </div>
-                <p class="text-xs text-slate-400">Script run karne par interactive menu open hoga jahan se aap Server Engine (Paper, Purpur, PowerNukkitX) choose kar sakte hain:</p>
-                <div class="bg-slate-950 p-4 rounded-xl font-mono text-xs text-emerald-400 border border-slate-800 overflow-x-auto">
+                    chmod +x *.sh<br>
                     ./start.sh
                 </div>
             </div>
         </section>
 
-        <!-- Section 3: Deep Configuration Options -->
+        <!-- Section 3 -->
         <section class="space-y-4">
             <h2 class="text-2xl font-bold text-slate-100 flex items-center gap-3">
                 <span class="bg-emerald-500/20 text-emerald-400 w-8 h-8 rounded-lg flex items-center justify-center text-sm border border-emerald-500/30">3</span>
-                Server Configuration & Optimization (Deep Dive)
-            </h2>
-            <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-6">
-                
-                <!-- Sub 3.1 -->
-                <div>
-                    <h3 class="text-lg font-bold text-emerald-400 mb-2">3.1 RAM Allocation Flags</h3>
-                    <p class="text-slate-400 text-sm mb-3">Android Mobile me RAM Management bohot strict hoti hai. Isliye Java Virtual Machine (JVM) flags adjust karna zaroori hai:</p>
-                    <div class="bg-slate-950 p-4 rounded-xl font-mono text-xs text-slate-200 border border-slate-800">
-                        java -Xms1024M -Xmx2048M -XX:+UseG1GC -jar paper.jar nogui
-                    </div>
-                    <ul class="text-xs text-slate-400 mt-2 space-y-1 list-disc list-inside">
-                        <li><code class="text-emerald-400">-Xms1024M</code>: Initial RAM Allocation (1GB).</li>
-                        <li><code class="text-emerald-400">-Xmx2048M</code>: Maximum RAM Limit (2GB recommended for 6GB RAM phones).</li>
-                        <li><code class="text-emerald-400">-XX:+UseG1GC</code>: Garbage Collection optimization freeze/lag kam karne ke liye.</li>
-                    </ul>
-                </div>
-
-                <!-- Sub 3.2 -->
-                <div>
-                    <h3 class="text-lg font-bold text-emerald-400 mb-2">3.2 Cross-Play Setup (GeyserMC & Floodgate)</h3>
-                    <p class="text-slate-400 text-sm mb-2">Agar aap Paper/Purpur Java Server bana rahe hain aur chahte hain ki Bedrock/PE players bhi connect ho sakein:</p>
-                    <ol class="text-xs text-slate-400 space-y-2 list-decimal list-inside">
-                        <li>Server ke <code class="text-emerald-400">/plugins</code> folder me **Geyser-Spigot.jar** aur **Floodgate-Spigot.jar** daalein.</li>
-                        <li>Server restart karein. Floodgate se Bedrock players bina Java Account ke login kar sakte hain.</li>
-                        <li>Geyser config me UDP Port <code class="text-emerald-400">19132</code> aur Java TCP Port <code class="text-emerald-400">25565</code> link hota hai.</li>
-                    </ol>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 4: Port Forwarding & Online Access -->
-        <section class="space-y-4">
-            <h2 class="text-2xl font-bold text-slate-100 flex items-center gap-3">
-                <span class="bg-emerald-500/20 text-emerald-400 w-8 h-8 rounded-lg flex items-center justify-center text-sm border border-emerald-500/30">4</span>
-                Public Connection & Port Forwarding
+                JVM Flags & RAM Management
             </h2>
             <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4">
-                <p class="text-slate-300 text-sm">Mobile Data / Local Wi-Fi par public IP nahi hoti. Friends ko connect karwane ke liye tunnel tools use karein:</p>
-                
-                <div class="grid md:grid-cols-2 gap-4 text-xs">
-                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
-                        <h4 class="font-bold text-emerald-400 text-sm mb-2">Option A: Playit.gg (Recommended)</h4>
-                        <p class="text-slate-400 mb-2">Zero-configuration tunnel service jo Java & Bedrock dono UDP/TCP ports handle karti hai.</p>
-                        <div class="font-mono text-emerald-400 bg-slate-900 p-2 rounded">pkg install playit -y && playit</div>
-                    </div>
-                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
-                        <h4 class="font-bold text-emerald-400 text-sm mb-2">Option B: Ngrok TCP Tunnel</h4>
-                        <p class="text-slate-400 mb-2">Fast connection but requires account authtoken setup inside Termux.</p>
-                        <div class="font-mono text-emerald-400 bg-slate-900 p-2 rounded">ngrok tcp 25565</div>
-                    </div>
+                <div class="bg-slate-950 p-4 rounded-xl font-mono text-xs text-slate-200 border border-slate-800">
+                    java -Xms1024M -Xmx2048M -XX:+UseG1GC -jar paper.jar nogui
                 </div>
             </div>
         </section>
-
-        <!-- Section 5: Troubleshooting & Errors -->
-        <section class="space-y-4">
-            <h2 class="text-2xl font-bold text-slate-100 flex items-center gap-3">
-                <span class="bg-emerald-500/20 text-emerald-400 w-8 h-8 rounded-lg flex items-center justify-center text-sm border border-emerald-500/30">5</span>
-                Troubleshooting & Common Errors
-            </h2>
-            <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4">
-                
-                <div class="border-b border-slate-800 pb-3">
-                    <h4 class="font-bold text-red-400 text-sm">Error: "Killed" or "Out of Memory (OOM)"</h4>
-                    <p class="text-slate-400 text-xs mt-1"><strong>Reason:</strong> Android OS ne background Termux process ko memory limit exceed hone par kill kar diya.</p>
-                    <p class="text-slate-300 text-xs mt-1"><strong>Fix:</strong> Phone Settings me jaakar Termux ke liye <em>Battery Optimization Disable</em> karein aur startup RAM <code class="text-emerald-400">-Xmx</code> value kam karein (e.g., 1.5GB).</p>
-                </div>
-
-                <div>
-                    <h4 class="font-bold text-yellow-400 text-sm">Error: "Unable to access jarfile paper.jar"</h4>
-                    <p class="text-slate-400 text-xs mt-1"><strong>Reason:</strong> Download incomplete tha ya jar file corrupt/missing directory me hai.</p>
-                    <p class="text-slate-300 text-xs mt-1"><strong>Fix:</strong> Script ke download section ko re-run karein ya manually jar file ko directory me place karein.</p>
-                </div>
-            </div>
-        </section>
-
     </main>
 
     <footer class="border-t border-slate-900 text-center py-6 text-xs text-slate-500">
-        <p>Minecraft Ultimate Termux Server Project — Detailed Documentation</p>
+        <p>Minecraft Ultimate Termux Server — Documentation</p>
     </footer>
+
+    <script>
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
+        }
+    </script>
 </body>
 </html>
