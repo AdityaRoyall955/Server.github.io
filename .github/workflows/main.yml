@@ -1,0 +1,25 @@
+name: Localhost Run SSH Terminal
+on: [workflow_dispatch] # Allows you to trigger it manually
+
+jobs:
+  ssh-tunnel:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure Runner SSH Server
+        run: |
+          # 1. Start the built-in SSH server on the GitHub Runner
+          sudo systemctl start ssh
+          
+          # 2. Set a secure password for the 'runner' user so you can log in
+          echo "runner:SuperSecurePassword123!" | sudo chpasswd
+
+      - name: Open Localhost.run Tunnel
+        run: |
+          echo "=========================================================="
+          echo "Starting tunnel... Look below for your public address!"
+          echo "=========================================================="
+          
+          # 3. Connect to localhost.run, forwarding local port 22 (SSH) to the public web
+          # We use '-o StrictHostKeyChecking=no' so the runner doesn't pause for confirmation
+          ssh -o StrictHostKeyChecking=no -R 80:localhost:22 nokey@localhost.run
+          
