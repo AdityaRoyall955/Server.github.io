@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Config Generator - Minecraft Termux Server</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans leading-relaxed selection:bg-emerald-500 selection:text-slate-950">
+
+    <!-- Header / Navigation -->
+    <nav class="border-b border-slate-800 bg-slate-900/80 sticky top-0 backdrop-blur z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="index.html" class="font-bold text-emerald-400 text-lg flex items-center gap-2 hover:underline">
+                <i class="fa-solid fa-arrow-left"></i> Home Page
+            </a>
+            <span class="text-xs bg-slate-800 px-3 py-1 rounded-full text-slate-400 border border-slate-700 font-mono">Config Builder v1.0</span>
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto px-4 py-12 space-y-10">
+
+        <!-- Title Header -->
+        <div class="border-b border-slate-800 pb-6 text-center max-w-3xl mx-auto">
+            <h1 class="text-4xl font-extrabold text-emerald-400 mb-3 tracking-tight">Custom Config Generator</h1>
+            <p class="text-slate-400 text-sm">Termux Minecraft server ke liye optimized <code class="text-emerald-400 font-mono">server.properties</code> file turant generate karein. Apni requirements select karein aur code copy kar ke Termux mein paste karein!</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8">
+            
+            <!-- Controls Form -->
+            <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-5">
+                <h2 class="text-xl font-bold text-slate-100 border-b border-slate-800 pb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-emerald-400"></i> Server Parameters
+                </h2>
+
+                <!-- Server MOTD -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Server Name (MOTD)</label>
+                    <input type="text" id="motd" value="A Termux Minecraft Server" oninput="generateConfig()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-emerald-500 font-mono">
+                </div>
+
+                <!-- Server Port & Max Players -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Server Port</label>
+                        <input type="number" id="serverPort" value="25565" oninput="generateConfig()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-emerald-400 focus:outline-none focus:border-emerald-500 font-mono">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Max Players</label>
+                        <input type="number" id="maxPlayers" value="10" oninput="generateConfig()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-emerald-400 focus:outline-none focus:border-emerald-500 font-mono">
+                    </div>
+                </div>
+
+                <!-- Gamemode & Difficulty -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Gamemode</label>
+                        <select id="gamemode" onchange="generateConfig()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-emerald-500 font-mono">
+                            <option value="survival">Survival</option>
+                            <option value="creative">Creative</option>
+                            <option value="adventure">Adventure</option>
+                            <option value="spectator">Spectator</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Difficulty</label>
+                        <select id="difficulty" onchange="generateConfig()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-emerald-500 font-mono">
+                            <option value="easy">Easy</option>
+                            <option value="normal" selected>Normal</option>
+                            <option value="hard">Hard</option>
+                            <option value="peaceful">Peaceful</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Online Mode & PvP -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Online Mode (Cracked)</label>
+                        <select id="onlineMode" onchange="generateConfig()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-emerald-400 focus:outline-none focus:border-emerald-500 font-mono">
+                            <option value="false">False (Cracked / Offline)</option>
+                            <option value="true">True (Original Account Only)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">PvP Allowed</label>
+                        <select id="pvp" onchange="generateConfig()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-emerald-500 font-mono">
+                            <option value="true">True</option>
+                            <option value="false">False</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- View Distance Optimization (Crucial for Mobile) -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">View Distance (Chunks)</label>
+                    <select id="viewDistance" onchange="generateConfig()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-emerald-400 focus:outline-none focus:border-emerald-500 font-mono">
+                        <option value="4">4 Chunks (Best for 3-4GB RAM Mobile)</option>
+                        <option value="6" selected>6 Chunks (Recommended Balance)</option>
+                        <option value="8">8 Chunks (High End Mobile 8GB+)</option>
+                        <option value="10">10 Chunks (Default)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Generated Output Block -->
+            <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                <div>
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-3 mb-4">
+                        <h2 class="text-xl font-bold text-slate-100 flex items-center gap-2">
+                            <i class="fa-solid fa-code text-emerald-400"></i> server.properties
+                        </h2>
+                        <button onclick="copyOutput()" class="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-3 py-1.5 rounded-lg text-xs font-mono transition flex items-center gap-1.5 cursor-pointer">
+                            <i class="fa-regular fa-copy"></i>
+                            <span id="copyBtnText">Copy Code</span>
+                        </button>
+                    </div>
+
+                    <p class="text-xs text-slate-400 mb-3">Copy this content into <code class="text-emerald-400">Minecraft-Ultimate-Turmux-server/server.properties</code> file inside Termux:</p>
+
+                    <pre id="configOutput" class="bg-slate-950 p-4 rounded-xl font-mono text-xs text-emerald-400 border border-slate-800 overflow-x-auto h-[360px] whitespace-pre-wrap leading-relaxed selection:bg-slate-800"></pre>
+                </div>
+
+                <div class="mt-4 bg-slate-950 p-3 rounded-xl border border-slate-800/80 text-[11px] text-slate-400">
+                    <span class="text-emerald-400 font-semibold">Pro-Tip:</span> Termux mein Nano Editor se file create karne ke liye command run karein: <br>
+                    <code class="text-slate-200 font-mono">nano server.properties</code>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer class="border-t border-slate-900 text-center py-6 text-xs text-slate-500">
+        <p>Minecraft Ultimate Termux Server — Configuration Generator Tool</p>
+    </footer>
+
+    <script>
+        function generateConfig() {
+            const motd = document.getElementById('motd').value || "A Termux Minecraft Server";
+            const port = document.getElementById('serverPort').value || "25565";
+            const maxPlayers = document.getElementById('maxPlayers').value || "10";
+            const gamemode = document.getElementById('gamemode').value;
+            const difficulty = document.getElementById('difficulty').value;
+            const onlineMode = document.getElementById('onlineMode').value;
+            const pvp = document.getElementById('pvp').value;
+            const viewDistance = document.getElementById('viewDistance').value;
+
+            const configText = `# Minecraft Server Properties - Termux Optimized
+# Generated via Custom Config Generator
+motd=${motd}
+server-port=${port}
+max-players=${maxPlayers}
+gamemode=${gamemode}
+difficulty=${difficulty}
+online-mode=${onlineMode}
+pvp=${pvp}
+view-distance=${viewDistance}
+simulation-distance=4
+spawn-protection=0
+enable-command-block=true
+allow-flight=true
+white-list=false
+enable-rcon=false
+network-compression-threshold=256
+sync-chunk-writes=false`;
+
+            document.getElementById('configOutput').innerText = configText;
+        }
+
+        function copyOutput() {
+            const code = document.getElementById('configOutput').innerText;
+            navigator.clipboard.writeText(code);
+            const btnText = document.getElementById('copyBtnText');
+            btnText.innerText = 'Copied!';
+            setTimeout(() => {
+                btnText.innerText = 'Copy Code';
+            }, 2000);
+        }
+
+        // Initial run on load
+        generateConfig();
+    </script>
+</body>
+</html>
