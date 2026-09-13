@@ -13,13 +13,24 @@ jobs:
           # 2. Set a secure password for the 'runner' user so you can log in
           echo "runner:SuperSecurePassword123!" | sudo chpasswd
 
-      - name: Open Localhost.run Tunnel
+          name: Pinggy SSH Terminal
+           on: [workflow_dispatch]
+
+                jobs:
+          ssh-tunnel:
+             runs-on: ubuntu-latest
+           steps:
+            - name: Configure Runner SSH Server
+             run: |
+            sudo systemctl start ssh
+          echo "runner:SuperSecurePassword123!" | sudo chpasswd
+
+      - name: Open Pinggy TCP Tunnel
         run: |
           echo "=========================================================="
-          echo "Starting tunnel... Look below for your public address!"
+          echo "Starting native SSH tunnel..."
           echo "=========================================================="
           
-          # 3. Connect to localhost.run, forwarding local port 22 (SSH) to the public web
-          # We use '-o StrictHostKeyChecking=no' so the runner doesn't pause for confirmation
-          ssh -o StrictHostKeyChecking=no -R 80:localhost:22 nokey@localhost.run
+          # This establishes a raw TCP tunnel directly on port 22
+          ssh -o StrictHostKeyChecking=no -R 0:localhost:22 loop@a.pinggy.io
           
