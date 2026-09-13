@@ -3,107 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deep FAQ & Troubleshooting - Minecraft Termux Server</title>
+    <title>FAQ - Minecraft Termux Server</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-slate-950 text-slate-100 font-sans leading-relaxed selection:bg-emerald-500 selection:text-slate-950">
 
-    <!-- Navigation -->
+    <!-- Universal Responsive Navbar -->
     <nav class="border-b border-slate-800 bg-slate-900/80 sticky top-0 backdrop-blur z-50">
         <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-            <a href="index.html" class="font-bold text-emerald-400 text-lg flex items-center gap-2 hover:underline">
-                <i class="fa-solid fa-arrow-left"></i> Home Page
+            <a href="index.html" class="flex items-center space-x-3">
+                <div class="bg-emerald-500/10 p-2 rounded-lg border border-emerald-500/20 text-emerald-400">
+                    <i class="fa-solid fa-terminal text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg tracking-wide text-slate-100">Minecraft Panel Pro</h1>
+                    <p class="text-xs text-slate-400">Termux & Android Hosting</p>
+                </div>
             </a>
-            <span class="text-xs bg-slate-800 px-3 py-1 rounded-full text-slate-400 border border-slate-700 font-mono">Deep Help Center</span>
+
+            <!-- Desktop Links -->
+            <div class="hidden md:flex space-x-6 text-sm font-medium text-slate-300">
+                <a href="index.html" class="hover:text-emerald-400 transition">Home</a>
+                <a href="docs.html" class="hover:text-emerald-400 transition">Docs</a>
+                <a href="features.html" class="hover:text-emerald-400 transition">Features</a>
+                <a href="faq.html" class="text-emerald-400 font-semibold">FAQ</a>
+                <a href="calculator.html" class="hover:text-emerald-400 transition">RAM Calculator</a>
+                <a href="generator.html" class="hover:text-emerald-400 transition">Config Generator</a>
+            </div>
+
+            <!-- GitHub Link & Mobile Menu Toggle -->
+            <div class="flex items-center space-x-3">
+                <a href="https://github.com/AdityaRoyall955/Minecraft-Ultimate-Turmux-server" target="_blank" class="hidden sm:flex bg-slate-800 hover:bg-slate-700 border border-slate-700 px-3.5 py-1.5 rounded-xl text-xs font-medium transition items-center space-x-2">
+                    <i class="fa-brands fa-github text-sm"></i>
+                    <span>GitHub</span>
+                </a>
+                <button onclick="toggleMobileMenu()" class="md:hidden text-slate-300 hover:text-emerald-400 text-xl focus:outline-none">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobileMenu" class="hidden md:hidden border-t border-slate-800 bg-slate-900 px-4 py-4 space-y-3 text-sm">
+            <a href="index.html" class="block text-slate-300 hover:text-emerald-400">Home</a>
+            <a href="docs.html" class="block text-slate-300 hover:text-emerald-400">Docs</a>
+            <a href="features.html" class="block text-slate-300 hover:text-emerald-400">Features</a>
+            <a href="faq.html" class="block text-emerald-400 font-semibold">FAQ</a>
+            <a href="calculator.html" class="block text-slate-300 hover:text-emerald-400">RAM Calculator</a>
+            <a href="generator.html" class="block text-slate-300 hover:text-emerald-400">Config Generator</a>
+            <a href="https://github.com/AdityaRoyall955/Minecraft-Ultimate-Turmux-server" target="_blank" class="inline-flex bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-lg text-xs items-center space-x-2">
+                <i class="fa-brands fa-github"></i>
+                <span>GitHub Repo</span>
+            </a>
         </div>
     </nav>
 
-    <main class="max-w-4xl mx-auto px-4 py-12 space-y-10">
+    <main class="max-w-4xl mx-auto px-4 py-12 space-y-8">
+        <h1 class="text-3xl font-extrabold text-emerald-400">Frequently Asked Questions</h1>
 
-        <!-- Title Header -->
-        <div class="border-b border-slate-800 pb-6">
-            <h1 class="text-4xl font-extrabold text-emerald-400 mb-3 tracking-tight">Frequently Asked Questions & Deep Troubleshooting</h1>
-            <p class="text-slate-400 text-base">Android environment par Termux Minecraft Server chalate waqt aane wale sabhi questions aur runtime issues ke deep technical answers.</p>
+        <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-3">
+            <h2 class="font-bold text-slate-100"><i class="fa-solid fa-circle-question text-emerald-400"></i> Termux background me crash kyu hota hai?</h2>
+            <p class="text-slate-400 text-sm">Android OS battery optimization process ko kill kar deta hai. Phone Settings me jaakar Termux ke battery optimization ko "Unrestricted" karein aur wake lock enable karein.</p>
         </div>
 
-        <!-- FAQ List -->
-        <div class="space-y-6">
-
-            <!-- Question 1 -->
-            <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-3">
-                <h2 class="text-lg font-bold text-slate-100 flex items-center gap-2">
-                    <i class="fa-solid fa-circle-question text-emerald-400"></i>
-                    Q1: Termux server randomly background me crash/close kyu ho jata hai?
-                </h2>
-                <div class="text-slate-300 text-sm space-y-2">
-                    <p><strong>Detailed Explanation:</strong> Modern Android OS (Android 12, 13, 14, 15) me Phantom Process Killer aur strict RAM Management active rehta hai. Jab server heavy RAM (e.g. 1.5GB+) consume karta hai, Android background process ko <code class="text-red-400">Signal 9 (Killed)</code> bhej kar terminate kar deta hai.</p>
-                    <p class="text-emerald-400 font-semibold mt-2">Deep Solution:</p>
-                    <ul class="list-disc list-inside text-xs text-slate-400 space-y-1 font-mono">
-                        <li>Phone Settings > Apps > Termux > Battery > set to "Unrestricted / No Optimization".</li>
-                        <li>Termux notification toolbar se "Acquire wake lock" enabled rakhein.</li>
-                        <li>ADB command (PC/LADB App) ke zariye Phantom Process Killer disable karein: <br>
-                            <span class="text-slate-200 bg-slate-950 px-2 py-1 rounded inline-block mt-1">adb shell device_config put activity_manager max_phantom_processes 2147483647</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Question 2 -->
-            <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-3">
-                <h2 class="text-lg font-bold text-slate-100 flex items-center gap-2">
-                    <i class="fa-solid fa-circle-question text-emerald-400"></i>
-                    Q2: Minecraft Bedrock (PE) aur Java Edition players ek sath kaise khel sakte hain?
-                </h2>
-                <div class="text-slate-300 text-sm space-y-2">
-                    <p><strong>Detailed Explanation:</strong> Java aur Bedrock ka network protocol alag hota hai (Java TCP connection use karta hai aur Bedrock UDP). Cross-play ke liye **GeyserMC** (protocol translator) aur **Floodgate** (authentication bypasser) ki zaroorat hoti hai.</p>
-                    <p class="text-emerald-400 font-semibold mt-2">Deep Setup Guide:</p>
-                    <ol class="list-decimal list-inside text-xs text-slate-400 space-y-1 font-mono">
-                        <li>Paper/Purpur server ke <code class="text-emerald-400">/plugins</code> directory me Geyser-Spigot.jar aur Floodgate-Spigot.jar download karke daalein.</li>
-                        <li>Server restart karke <code class="text-emerald-400">plugins/Geyser-Spigot/config.yml</code> edit karein.</li>
-                        <li>Bedrock section me port <code class="text-emerald-400">19132</code> aur auth-type ko <code class="text-emerald-400">floodgate</code> set karein.</li>
-                    </ol>
-                </div>
-            </div>
-
-            <!-- Question 3 -->
-            <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-3">
-                <h2 class="text-lg font-bold text-slate-100 flex items-center gap-2">
-                    <i class="fa-solid fa-circle-question text-emerald-400"></i>
-                    Q3: Java Version Error ("Has been compiled by a more recent version of the Java Runtime")?
-                </h2>
-                <div class="text-slate-300 text-sm space-y-2">
-                    <p><strong>Detailed Explanation:</strong> Latest Minecraft versions (1.20.x+) ko run karne ke liye minimum Java 17 ya Java 21 ki requirement hoti hai. Agar Termux me purana OpenJDK (like Java 11) install hoga, toh server boot nahi hoga.</p>
-                    <p class="text-emerald-400 font-semibold mt-2">Fix Command:</p>
-                    <div class="bg-slate-950 p-3 rounded-xl font-mono text-xs text-emerald-400 border border-slate-800">
-                        pkg uninstall openjdk-11 -y<br>
-                        pkg install openjdk-17 -y  # (Ya openjdk-21)
-                    </div>
-                </div>
-            </div>
-
-            <!-- Question 4 -->
-            <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-3">
-                <h2 class="text-lg font-bold text-slate-100 flex items-center gap-2">
-                    <i class="fa-solid fa-circle-question text-emerald-400"></i>
-                    Q4: Local Network se bahar ke friends connect nahi kar pa rahe?
-                </h2>
-                <div class="text-slate-300 text-sm space-y-2">
-                    <p><strong>Detailed Explanation:</strong> Mobile Service Providers (Jio, Airtel, Vi etc.) CGNAT (Carrier-Grade NAT) use karte hain, jiski waja se mobile ka Public IP address aur Open Ports reachable nahi hote.</p>
-                    <p class="text-emerald-400 font-semibold mt-2">Deep Solution:</p>
-                    <p class="text-xs text-slate-400">Aapko Playit.gg tunnel binary Termux me run karni padegi jo local port <code class="text-emerald-400">25565</code> ko global IP me tunnel kar deta hai:</p>
-                    <div class="bg-slate-950 p-3 rounded-xl font-mono text-xs text-emerald-400 border border-slate-800">
-                        pkg install playit -y && playit
-                    </div>
-                </div>
-            </div>
-
+        <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-3">
+            <h2 class="font-bold text-slate-100"><i class="fa-solid fa-circle-question text-emerald-400"></i> Cross-Play (Java + Bedrock) kaise chalayein?</h2>
+            <p class="text-slate-400 text-sm">Server ke <code class="text-emerald-400">/plugins</code> folder me Geyser-Spigot aur Floodgate-Spigot plugins install karke server restart karein.</p>
         </div>
-
     </main>
 
     <footer class="border-t border-slate-900 text-center py-6 text-xs text-slate-500">
-        <p>Minecraft Ultimate Termux Server — Deep FAQ & Guide</p>
+        <p>Minecraft Ultimate Termux Server — FAQ</p>
     </footer>
+
+    <script>
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
+        }
+    </script>
 </body>
 </html>
