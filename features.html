@@ -3,38 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deep Features - Minecraft Termux Engine</title>
+    <title>Features - Minecraft Termux Engine</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-slate-950 text-slate-100 font-sans leading-relaxed">
 
-    <!-- Navigation -->
+    <!-- Universal Responsive Navbar -->
     <nav class="border-b border-slate-800 bg-slate-900/80 sticky top-0 backdrop-blur z-50">
         <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-            <a href="index.html" class="font-bold text-emerald-400 text-lg flex items-center gap-2 hover:underline">
-                <i class="fa-solid fa-arrow-left"></i> Home Page
+            <a href="index.html" class="flex items-center space-x-3">
+                <div class="bg-emerald-500/10 p-2 rounded-lg border border-emerald-500/20 text-emerald-400">
+                    <i class="fa-solid fa-terminal text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg tracking-wide text-slate-100">Minecraft Panel Pro</h1>
+                    <p class="text-xs text-slate-400">Termux & Android Hosting</p>
+                </div>
             </a>
-            <span class="text-xs bg-slate-800 px-3 py-1 rounded-full text-slate-400 border border-slate-700 font-mono">Engine Deep Dive</span>
+
+            <!-- Desktop Links -->
+            <div class="hidden md:flex space-x-6 text-sm font-medium text-slate-300">
+                <a href="index.html" class="hover:text-emerald-400 transition">Home</a>
+                <a href="docs.html" class="hover:text-emerald-400 transition">Docs</a>
+                <a href="features.html" class="text-emerald-400 font-semibold">Features</a>
+                <a href="faq.html" class="hover:text-emerald-400 transition">FAQ</a>
+                <a href="calculator.html" class="hover:text-emerald-400 transition">RAM Calculator</a>
+                <a href="generator.html" class="hover:text-emerald-400 transition">Config Generator</a>
+            </div>
+
+            <!-- GitHub Link & Mobile Menu Toggle -->
+            <div class="flex items-center space-x-3">
+                <a href="https://github.com/AdityaRoyall955/Minecraft-Ultimate-Turmux-server" target="_blank" class="hidden sm:flex bg-slate-800 hover:bg-slate-700 border border-slate-700 px-3.5 py-1.5 rounded-xl text-xs font-medium transition items-center space-x-2">
+                    <i class="fa-brands fa-github text-sm"></i>
+                    <span>GitHub</span>
+                </a>
+                <button onclick="toggleMobileMenu()" class="md:hidden text-slate-300 hover:text-emerald-400 text-xl focus:outline-none">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobileMenu" class="hidden md:hidden border-t border-slate-800 bg-slate-900 px-4 py-4 space-y-3 text-sm">
+            <a href="index.html" class="block text-slate-300 hover:text-emerald-400">Home</a>
+            <a href="docs.html" class="block text-slate-300 hover:text-emerald-400">Docs</a>
+            <a href="features.html" class="block text-emerald-400 font-semibold">Features</a>
+            <a href="faq.html" class="block text-slate-300 hover:text-emerald-400">FAQ</a>
+            <a href="calculator.html" class="block text-slate-300 hover:text-emerald-400">RAM Calculator</a>
+            <a href="generator.html" class="block text-slate-300 hover:text-emerald-400">Config Generator</a>
+            <a href="https://github.com/AdityaRoyall955/Minecraft-Ultimate-Turmux-server" target="_blank" class="inline-flex bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-lg text-xs items-center space-x-2">
+                <i class="fa-brands fa-github"></i>
+                <span>GitHub Repo</span>
+            </a>
         </div>
     </nav>
 
     <main class="max-w-5xl mx-auto px-4 py-12 space-y-12">
-        
         <div class="text-center max-w-3xl mx-auto">
-            <h1 class="text-4xl font-extrabold text-emerald-400 mb-3 tracking-tight">Supported Server Cores & Benchmarks</h1>
-            <p class="text-slate-400 text-sm">Deep technical comparison between all 3 server engines supported in Termux Script.</p>
+            <h1 class="text-4xl font-extrabold text-emerald-400 mb-3 tracking-tight">Supported Server Engines</h1>
+            <p class="text-slate-400 text-sm">PaperMC, Purpur, and PowerNukkitX breakdown for Android hardware.</p>
         </div>
 
-        <!-- Detailed Comparison Table -->
         <div class="bg-slate-900 rounded-2xl border border-slate-800 overflow-x-auto shadow-xl">
             <table class="w-full text-left text-sm text-slate-300">
                 <thead class="bg-slate-950 text-xs font-mono uppercase text-emerald-400 border-b border-slate-800">
                     <tr>
                         <th class="p-4">Server Core</th>
                         <th class="p-4">Edition</th>
-                        <th class="p-4">Min RAM Needed</th>
-                        <th class="p-4">Plugin/Mod Support</th>
+                        <th class="p-4">Min RAM</th>
                         <th class="p-4">Best For</th>
                     </tr>
                 </thead>
@@ -43,60 +80,33 @@
                         <td class="p-4 font-bold text-slate-100">PaperMC</td>
                         <td class="p-4"><span class="bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20">Java</span></td>
                         <td class="p-4 font-mono">1.5 GB</td>
-                        <td class="p-4">Bukkit, Spigot, Paper Plugins</td>
                         <td class="p-4 text-slate-400">High stability, lag fixing, small SMPs with friends.</td>
                     </tr>
                     <tr class="hover:bg-slate-800/40">
                         <td class="p-4 font-bold text-slate-100">Purpur</td>
                         <td class="p-4"><span class="bg-purple-500/10 text-purple-400 px-2 py-0.5 rounded border border-purple-500/20">Java (Fork)</span></td>
                         <td class="p-4 font-mono">2.0 GB</td>
-                        <td class="p-4">All Paper plugins + Custom Configs</td>
-                        <td class="p-4 text-slate-400">Extreme customization (e.g., ridable mobs, performance tweaks).</td>
+                        <td class="p-4 text-slate-400">Extreme customization & gameplay tweaks.</td>
                     </tr>
                     <tr class="hover:bg-slate-800/40">
                         <td class="p-4 font-bold text-slate-100">PowerNukkitX</td>
                         <td class="p-4"><span class="bg-cyan-500/10 text-cyan-400 px-2 py-0.5 rounded border border-cyan-500/20">Bedrock Native</span></td>
                         <td class="p-4 font-mono">1.0 GB</td>
-                        <td class="p-4">JS / Java Nukkit Plugins</td>
-                        <td class="p-4 text-slate-400">Super lightweight Bedrock server with custom block/item support.</td>
+                        <td class="p-4 text-slate-400">Lightweight Bedrock server with custom block support.</td>
                     </tr>
                 </tbody>
             </table>
         </div>
-
-        <!-- Deep Engine Breakdown -->
-        <div class="grid md:grid-cols-3 gap-6">
-            
-            <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-3">
-                <div class="text-emerald-400 text-2xl"><i class="fa-solid fa-microchip"></i></div>
-                <h3 class="font-bold text-lg text-slate-100">PaperMC Engine</h3>
-                <p class="text-slate-400 text-xs leading-relaxed">
-                    Paper is designed to fix gameplay lag and exploit bugs. On mobile, Paper reduces tick rates of distant chunks and optimizes entity AI, allowing smooth 20 TPS performance even on mid-range phones.
-                </p>
-            </div>
-
-            <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-3">
-                <div class="text-purple-400 text-2xl"><i class="fa-solid fa-sliders"></i></div>
-                <h3 class="font-bold text-lg text-slate-100">Purpur Engine</h3>
-                <p class="text-slate-400 text-xs leading-relaxed">
-                    Purpur expands Paper's features with deep configuration files (<code class="text-purple-400">purpur.yml</code>). Allows you to tweak mob spawning rates, command limits, and TPS thresholds directly from Termux text editor.
-                </p>
-            </div>
-
-            <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-3">
-                <div class="text-cyan-400 text-2xl"><i class="fa-solid fa-cube"></i></div>
-                <h3 class="font-bold text-lg text-slate-100">PowerNukkitX Engine</h3>
-                <p class="text-slate-400 text-xs leading-relaxed">
-                    Built ground-up for Minecraft Bedrock (MCPE). PowerNukkitX executes natively without needing Java-to-Bedrock translation layers like Geyser, consuming minimal CPU cycles on Android ARM processors.
-                </p>
-            </div>
-
-        </div>
-
     </main>
 
     <footer class="border-t border-slate-900 text-center py-6 text-xs text-slate-500">
-        <p>Minecraft Ultimate Termux Server Project — Feature Deep-Dive</p>
+        <p>Minecraft Ultimate Termux Server — Features</p>
     </footer>
+
+    <script>
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
+        }
+    </script>
 </body>
 </html>
