@@ -1,36 +1,31 @@
-name: Localhost Run SSH Terminal
-on: [workflow_dispatch] # Allows you to trigger it manually
+name: Free SSH Terminal
+
+on:
+  workflow_dispatch: # Allows you to manually trigger the terminal from the GitHub Actions tab
 
 jobs:
-  ssh-tunnel:
+  ssh-session:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
       - name: Configure Runner SSH Server
         run: |
-          # 1. Start the built-in SSH server on the GitHub Runner
+          # Start the built-in Linux OpenSSH server daemon on the runner
           sudo systemctl start ssh
           
-          # 2. Set a secure password for the 'runner' user so you can log in
-          echo "runner:SuperSecurePassword123!" | sudo chpasswd
-
-          name: Pinggy SSH Terminal
-           on: [workflow_dispatch]
-
-                jobs:
-          ssh-tunnel:
-             runs-on: ubuntu-latest
-           steps:
-            - name: Configure Runner SSH Server
-             run: |
-            sudo systemctl start ssh
+          # Set the login password for the default 'runner' user account
           echo "runner:SuperSecurePassword123!" | sudo chpasswd
 
       - name: Open Pinggy TCP Tunnel
         run: |
           echo "=========================================================="
-          echo "Starting native SSH tunnel..."
+          echo "STARTING NATIVE TCP TUNNEL..."
+          echo "Look below for the command to paste into Termux!"
           echo "=========================================================="
           
-          # This establishes a raw TCP tunnel directly on port 22
+          # Connects out to Pinggy to expose the runner's local port 22 (SSH)
+          # Uses StrictHostKeyChecking=no so the workflow runs headless without pausing
           ssh -o StrictHostKeyChecking=no -R 0:localhost:22 loop@a.pinggy.io
           
