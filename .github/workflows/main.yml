@@ -14,5 +14,5 @@ jobs:
 
       - name: Open Pinggy TCP Tunnel
         run: |
-          ssh -o StrictHostKeyChecking=no -R 0:localhost:22 loop@a.pinggy.io
+          ssh -p 443 -o StrictHostKeyChecking=no -R 0:localhost:22 tcp@free.pinggy.io
           
